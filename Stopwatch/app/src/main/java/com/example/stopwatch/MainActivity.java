@@ -16,6 +16,7 @@ import com.example.stopwatch.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
     private int ms = 0, sec = 0, min = 0;
     private boolean pausePressed = false;
+    private  boolean startPressed = false;
     private Runnable msRunnable;
     private long startTime = 0;
 
@@ -38,26 +39,29 @@ public class MainActivity extends AppCompatActivity {
         binding.startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startTime == 0) {
-                    startTime = System.currentTimeMillis();
-                }
-                msRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        long currentTime = System.currentTimeMillis();
-                        long elapsedTime = currentTime - startTime;
-                        min = (int) (elapsedTime / (60 * 1000));
-                        sec = (int) ((elapsedTime / 1000) % 60);
-                        ms = (int) (elapsedTime % 1000);
-                        binding.progressText1.setText(String.format("%02d", min));
-                        binding.progressText2.setText(String.format("%02d", sec));
-                        binding.progressText3.setText(String.format("%03d", ms));
-                        binding.progressBar.setProgress(sec, true);
-                        handlerMs.postDelayed(this, 1);
+                if (!startPressed){
+                    if (startTime == 0) {
+                        startTime = System.currentTimeMillis();
                     }
-                };
-                handlerMs.post(msRunnable);
-                binding.pauseButton.setVisibility(View.VISIBLE);
+                    msRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            long currentTime = System.currentTimeMillis();
+                            long elapsedTime = currentTime - startTime;
+                            min = (int) (elapsedTime / (60 * 1000));
+                            sec = (int) ((elapsedTime / 1000) % 60);
+                            ms = (int) (elapsedTime % 1000);
+                            binding.progressText1.setText(String.format("%02d", min));
+                            binding.progressText2.setText(String.format("%02d", sec));
+                            binding.progressText3.setText(String.format("%03d", ms));
+                            binding.progressBar.setProgress(sec, true);
+                            handlerMs.postDelayed(this, 1);
+                        }
+                    };
+                    handlerMs.post(msRunnable);
+                    binding.pauseButton.setVisibility(View.VISIBLE);
+                    startPressed = true;
+                }
             }
         });
 
@@ -73,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 handlerMs.removeCallbacks(msRunnable);
                 binding.pauseButton.setVisibility(View.GONE);
                 binding.progressBar.setProgress(0);
-                startTime = 0; // Reset startTime when stopping the timer
+                startTime = 0;
+                startPressed = false;
             }
         });
 
