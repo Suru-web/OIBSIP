@@ -3,7 +3,28 @@
     <style name="Base.Theme.ToDo" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/quicksand</item>
     </style>
 
     <style name="Theme.ToDo" parent="Base.Theme.ToDo" />
+    <style name="APP_SCREEN_COLOR">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="TEXT_COLOR">
+        <item name="android:textColor">@color/dark</item>
+    </style>
+    <style name="EDIT_TEXT_STYLE">
+        <item name="android:textColorHint">@color/dark</item>
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+    <style name="SIGN_IN_UP_BUTTON">
+        <item name="android:background">@drawable/button_round_dark</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="GOOGLE_LOGIN_BUTTON">
+        <item name="android:background">@drawable/button_round_white</item>
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:backgroundTint">@color/silver</item>
+    </style>
 </resources>
