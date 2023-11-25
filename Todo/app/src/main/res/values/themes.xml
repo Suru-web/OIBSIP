@@ -27,4 +27,11 @@
         <item name="android:textColor">@color/dark</item>
         <item name="android:backgroundTint">@color/silver</item>
     </style>
+    <style name="TEXTINPUTLAYOUT">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="helperTextTextColor">@color/red</item>
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxStrokeColor">@color/dark</item>
+        <item name="boxStrokeErrorColor">@color/red</item>
+    </style>
 </resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1004868812453",
+    "project_id": "todo-3dcfb",
+    "storage_bucket": "todo-3dcfb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004868812453:android:509817c89f8a84cf36974c",
+        "android_client_info": {
+          "package_name": "com.suraj.todo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtqPzfYPvzkm3_JPo2sOECKOzvJH3wX08"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

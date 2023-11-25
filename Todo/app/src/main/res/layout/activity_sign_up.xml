@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="3.5"
-    tools:context=".sign_in">
+    tools:context=".sign_up">
 
     <TextView
         style="@style/TEXT_COLOR"
@@ -28,7 +28,7 @@
         android:gravity="center_vertical"
         android:paddingStart="@dimen/dp40"
         android:paddingEnd="0dp"
-        android:text="@string/welcome_back"
+        android:text="@string/hello_there"
         android:textSize="@dimen/dp24" />
 
     <LinearLayout
@@ -38,7 +38,8 @@
         android:divider="@drawable/empty_divider"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="@dimen/dp30"
+        android:paddingStart="@dimen/dp30"
+        android:paddingEnd="@dimen/dp30"
         android:showDividers="middle">
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -46,6 +47,7 @@
             style="@style/EDIT_TEXT_STYLE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
             android:paddingBottom="@dimen/dp15"
             android:hint="@string/email"
             android:paddingStart="@dimen/dp10"
@@ -57,23 +59,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dp15"
+            android:inputType="textPassword"
             android:hint="@string/password"
             android:paddingStart="@dimen/dp10"
             android:paddingEnd="0dp" />
-
-        <TextView
-            android:id="@+id/forgotPassword"
-            style="@style/TEXT_COLOR"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/confirmPasswordINP"
+            style="@style/EDIT_TEXT_STYLE"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/forgot_password" />
+            android:paddingBottom="@dimen/dp15"
+            android:inputType="textPassword"
+            android:hint="@string/confirm_password"
+            android:paddingStart="@dimen/dp10"
+            android:paddingEnd="0dp" />
 
     </LinearLayout>
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/loginButton"
+        android:id="@+id/signUpButton"
         style="@style/SIGN_IN_UP_BUTTON"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -81,7 +86,7 @@
         android:layout_marginStart="@dimen/dp30"
         android:layout_marginEnd="@dimen/dp30"
         android:layout_weight="0.23"
-        android:text="@string/log_in" />
+        android:text="@string/sign_up" />
 
     <RelativeLayout
         android:id="@+id/googleLoginRL"
@@ -114,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:text="@string/log_in_with_google" />
+                android:text="@string/sign_up_with_google" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -129,23 +134,23 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_weight="0.1"
-        android:text="@string/need_account"
+        android:text="@string/have_account"
         android:textSize="@dimen/dp14" />
 
     <TextView
-        android:id="@+id/signUpBtn"
+        android:id="@+id/loginButton"
         style="@style/TEXT_COLOR"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp10"
         android:layout_weight="0.1"
-        android:text="@string/sign_up"
+        android:text="@string/log_in"
         android:textSize="@dimen/dp14" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.3" />
+        android:layout_weight="0.35" />
+
 
 </LinearLayout>
