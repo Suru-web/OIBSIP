@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ToDo</string>
     <string name="hello_there">Hello there,</string>
+    <string name="hello_there_name">Hello there,\nName</string>
     <string name="welcome_back">Welcome back,</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -12,4 +13,12 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="need_account">Need an account?</string>
     <string name="have_account">Have an account?</string>
+    <string name="web_id">1004868812453-vee8vnc7ss7qhopl4k55he1ghbg1duk4.apps.googleusercontent.com</string>
+    <string name="title">Title</string>
+    <string name="number_of_tasks">no. Tasks</string>
+    <string name="add_new">Add new</string>
+    <string name="new_task">New Task</string>
+    <string name="cancel">Cancel</string>
+    <string name="what_s_on_your_mind">What\'s on your mind?</string>
+    <string name="create">Create</string>
 </resources>

@@ -12,7 +12,12 @@
           "package_name": "com.suraj.todo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1004868812453-vee8vnc7ss7qhopl4k55he1ghbg1duk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtqPzfYPvzkm3_JPo2sOECKOzvJH3wX08"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004868812453-vee8vnc7ss7qhopl4k55he1ghbg1duk4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

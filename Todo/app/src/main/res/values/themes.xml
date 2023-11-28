@@ -30,8 +30,24 @@
     <style name="TEXTINPUTLAYOUT">
         <item name="boxBackgroundColor">@color/white</item>
         <item name="helperTextTextColor">@color/red</item>
-        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundMode">none</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="android:state_focused">true</item>
+        <item name="hintTextColor">@color/dark</item>
+        <item name="cursorColor">@color/dark</item>
+        <item name="android:textSize">@dimen/dp18</item>
         <item name="boxStrokeColor">@color/dark</item>
         <item name="boxStrokeErrorColor">@color/red</item>
     </style>
+    <style name="LIST_COLORING">
+        <item name="cardBackgroundColor">@color/very_light_grey</item>
+        <item name="cardCornerRadius">@dimen/dp20</item>
+        <item name="rippleColor">@color/silver</item>
+        <item name="cardElevation">@dimen/dp16</item>
+    </style>
+    <style name="FAB_STYLE">
+        <item name="android:backgroundTint">@color/dark_sky_blue</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
 </resources>
