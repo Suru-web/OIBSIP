@@ -31,7 +31,7 @@
     <style name="TEXTINPUTLAYOUT">
         <item name="boxBackgroundColor">@color/dark</item>
         <item name="helperTextTextColor">@color/red</item>
-        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundMode">outline</item>
         <item name="boxStrokeColor">@color/white</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="hintTextColor">@color/white</item>

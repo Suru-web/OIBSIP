@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dp15"
             android:hint="@string/email"
+            android:inputType="textEmailAddress"
             android:paddingStart="@dimen/dp10"
             android:paddingEnd="0dp" />
 
@@ -56,6 +57,7 @@
             style="@style/EDIT_TEXT_STYLE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:paddingBottom="@dimen/dp15"
             android:hint="@string/password"
             android:paddingStart="@dimen/dp10"
