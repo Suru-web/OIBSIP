@@ -4,7 +4,7 @@
     style="@style/LIST_COLORING"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp150"
-    android:layout_margin="@dimen/dp20">
+    android:layout_margin="@dimen/dp10">
 
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/dp8"
             android:gravity="center"
             android:text="@string/title"
-            android:textSize="@dimen/dp26"
+            android:textSize="@dimen/dp22"
             tools:ignore="SpUsage" />
 
         <TextView

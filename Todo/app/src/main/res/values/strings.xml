@@ -31,4 +31,7 @@
     <string name="studies">Studies</string>
     <string name="home">Home</string>
     <string name="shopping">Shopping</string>
+    <string name="all_tasks">All Tasks</string>
+    <string name="category_cannot_be_empty">Category cannot be empty</string>
+    <string name="task_cannot_be_empty">Task cannot be empty</string>
 </resources>

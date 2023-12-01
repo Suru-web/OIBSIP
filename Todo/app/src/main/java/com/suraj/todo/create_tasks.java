@@ -1,5 +1,6 @@
 package com.suraj.todo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -9,25 +10,34 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
-import android.widget.PopupWindow;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.suraj.todo.databinding.ActivityCreateTasksBinding;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
-public class create_tasks extends AppCompatActivity {
+public class create_tasks extends AppCompatActivity implements View.OnClickListener {
     private ActivityCreateTasksBinding binding;
+    int date, month, yearDB;
+    String task, note, category;
+    FirebaseFirestore fb = FirebaseFirestore.getInstance();
+    String authID = FirebaseAuth.getInstance().getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +58,9 @@ public class create_tasks extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Calendar c = Calendar.getInstance();
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
+                int currentYear = c.get(Calendar.YEAR);
+                int currentMonth = c.get(Calendar.MONTH);
+                int currentDay = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
                         create_tasks.this,
                         new DatePickerDialog.OnDateSetListener() {
@@ -59,12 +69,13 @@ public class create_tasks extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 binding.datePickerTV.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                date = dayOfMonth;
+                                month = monthOfYear;
+                                yearDB = year;
                             }
                         },
-                        year, month, day);
+                        currentYear, currentMonth, currentDay);
                 datePickerDialog.show();
-
-
             }
         });
         binding.addNote.setOnClickListener(new View.OnClickListener() {
@@ -78,11 +89,53 @@ public class create_tasks extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) create_tasks.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 binding.textInputLayoutEnterTask.clearFocus();
                 binding.addCategoryCardView.setVisibility(View.VISIBLE);
             }
         });
+        binding.createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                task = binding.textInputLayoutEnterTask.getEditText().getText().toString();
+                note = binding.extraNote.getText().toString();
+                if (category == null) {
+                    category = "All";
+                }
+                if (task.isEmpty()) {
+                    binding.textInputLayoutEnterTask.setHelperText(getString(R.string.task_cannot_be_empty));
+                    return;
+                }
+                Map<String, Object> data = new HashMap<>();
+                data.put("task", task);
+                data.put("date", date);
+                data.put("month", month);
+                data.put("year", yearDB);
+                data.put("notes", note);
+                data.put("category", category);
+                fb.collection("users").document(authID).collection(category).add(data   )
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(create_tasks.this, "Task saved", Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(create_tasks.this, "Task cannot be saved", Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
+        });
+        binding.allTask.setOnClickListener(this);
+        binding.workTask.setOnClickListener(this);
+        binding.shoppingTask.setOnClickListener(this);
+        binding.tripTask.setOnClickListener(this);
+        binding.studyTask.setOnClickListener(this);
+        binding.homeTask.setOnClickListener(this);
+        binding.musicTask.setOnClickListener(this);
 
     }
 
@@ -149,4 +202,24 @@ public class create_tasks extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.allTask) {
+            category = "All";
+        } else if (id == R.id.workTask) {
+            category = "Work";
+        } else if (id == R.id.shoppingTask) {
+            category = "Shopping";
+        } else if (id == R.id.tripTask) {
+            category = "Trip";
+        } else if (id == R.id.studyTask) {
+            category = "Study";
+        } else if (id == R.id.homeTask) {
+            category = "Home";
+        } else if (id == R.id.musicTask) {
+            category = "Music";
+        }
+        binding.category.setText(category);
+    }
 }

@@ -43,7 +43,7 @@
         <item name="cardBackgroundColor">@color/very_light_grey</item>
         <item name="cardCornerRadius">@dimen/dp20</item>
         <item name="rippleColor">@color/silver</item>
-        <item name="cardElevation">@dimen/dp16</item>
+        <item name="cardElevation">@dimen/dp8</item>
     </style>
     <style name="FAB_STYLE">
         <item name="android:backgroundTint">@color/dark_sky_blue</item>
