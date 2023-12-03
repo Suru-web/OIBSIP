@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
@@ -117,7 +118,8 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(create_tasks.this, "Task saved", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(create_tasks.this, MainActivity.class);
+                                startActivity(intent);
                                 finish();
                             }
                         })

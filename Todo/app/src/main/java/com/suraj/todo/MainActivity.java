@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<main_list> studyList = new ArrayList<>();
     ArrayList<main_list> homeList = new ArrayList<>();
     ArrayList<main_list> musicList = new ArrayList<>();
+    String authID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,12 @@ public class MainActivity extends AppCompatActivity {
         setSystemBarColors();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+        authID = auth.getUid();
         firestore = FirebaseFirestore.getInstance();
         setNameUser();
         setFabColor();
 
-        main_adapter adapter = new main_adapter(binding.getRoot().getContext(),combinedList);
+        main_adapter adapter = new main_adapter(binding.getRoot().getContext(), combinedList);
         binding.notesListRecycler.setAdapter(adapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(binding.getRoot().getContext(), 2);
         binding.notesListRecycler.setLayoutManager(gridLayoutManager);
@@ -83,36 +85,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, create_tasks.class));
+                finish();
             }
         });
         getValuePutToAdapter(adapter);
     }
 
     private void getValuePutToAdapter(main_adapter adapter) {
-        firestore.collection("users").document(auth.getUid()).collection("All")
+        combinedList.clear();
+        firestore.collection("users").document(authID).collection("All")
                                 .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        Log.d(TAG, document.getId() + " => " + document.getData());
                                                         main_list mainList = document.toObject(main_list.class);
+                                                        mainList.setTaskCount(mainList.getTaskCount()+1);
                                                         if (allList.isEmpty()) {
                                                             allList.add(mainList);
-                                                        }
-                                                        else {
+                                                        } else {
                                                             boolean categoryExists = false;
                                                             for (main_list listItem : allList) {
                                                                 if (listItem.getCategory().equals(mainList.getCategory())) {
-                                                                    // Increment the task count for the existing category
                                                                     listItem.setTaskCount(listItem.getTaskCount() + 1);
                                                                     categoryExists = true;
                                                                     break;
                                                                 }
                                                             }
                                                             if (!categoryExists) {
-                                                                // If the category doesn't exist, add a new entry to the list
                                                                 allList.add(mainList);
                                                             }
                                                         }
@@ -124,20 +125,194 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             }
                                         });
-        firestore.collection("users").document(auth.getUid()).collection("Work")
+
+        firestore.collection("users").document(authID).collection("Work")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
                                 main_list mainList = document.toObject(main_list.class);
-                                workList.add(mainList);
-                                Log.d("----All List----",String.valueOf(allList));
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (workList.isEmpty()) {
+                                    workList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : workList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        workList.add(mainList);
+                                    }
+                                }
                             }
                             adapter.notifyDataSetChanged();
                             combinedList.addAll(workList);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        firestore.collection("users").document(authID).collection("Trip")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                main_list mainList = document.toObject(main_list.class);
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (tripList.isEmpty()) {
+                                    tripList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : tripList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        tripList.add(mainList);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            combinedList.addAll(tripList);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        firestore.collection("users").document(authID).collection("Study")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                main_list mainList = document.toObject(main_list.class);
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (studyList.isEmpty()) {
+                                    studyList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : studyList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        studyList.add(mainList);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            combinedList.addAll(studyList);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        firestore.collection("users").document(authID).collection("Home")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                main_list mainList = document.toObject(main_list.class);
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (homeList.isEmpty()) {
+                                    homeList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : homeList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        homeList.add(mainList);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            combinedList.addAll(homeList);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        firestore.collection("users").document(authID).collection("Music")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                main_list mainList = document.toObject(main_list.class);
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (musicList.isEmpty()) {
+                                    musicList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : musicList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        musicList.add(mainList);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            combinedList.addAll(musicList);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        firestore.collection("users").document(authID).collection("Shopping")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                main_list mainList = document.toObject(main_list.class);
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (shoppingList.isEmpty()) {
+                                    shoppingList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : shoppingList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        shoppingList.add(mainList);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            combinedList.addAll(shoppingList);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }

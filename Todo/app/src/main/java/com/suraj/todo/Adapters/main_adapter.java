@@ -64,7 +64,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.MyViewHolder
         int count = 0;
         for (main_list task : list) {
             if (task.getCategory().equals(category)) {
-                count++;
+                count = task.getTaskCount();
             }
         }
         return count;

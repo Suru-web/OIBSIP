@@ -45,7 +45,7 @@
         <item name="cardCornerRadius">@dimen/dp20</item>
         <item name="rippleColor">@color/dark</item>
         <item name="elevation">@dimen/dp1</item>
-        <item name="strokeColor">@color/light_dark</item>
+        <item name="strokeWidth">0dp</item>
         <item name="cardElevation">@dimen/dp16</item>
     </style>
     <style name="FAB_STYLE">
