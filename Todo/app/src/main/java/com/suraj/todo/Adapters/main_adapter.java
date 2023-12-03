@@ -1,6 +1,7 @@
 package com.suraj.todo.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.suraj.todo.R;
+import com.suraj.todo.category_list_view;
 import com.suraj.todo.objects.main_list;
 
 import java.util.ArrayList;
@@ -27,7 +30,7 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.MyViewHolder
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.main_list_layout,parent,false);
         return new MyViewHolder(view);
     }
 
@@ -59,6 +62,16 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.MyViewHolder
                 break;
         }
         holder.taskNumbers.setText(String.valueOf(getTaskCountForCategory(mainList.getCategory())));
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, category_list_view.class);
+                intent.putExtra("category",mainList.getCategory());
+                int taskCount = getTaskCountForCategory(mainList.getCategory());
+                intent.putExtra("taskCount",String.valueOf(taskCount));
+                context.startActivity(intent);
+            }
+        });
     }
     private int getTaskCountForCategory(String category) {
         int count = 0;
@@ -78,11 +91,13 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.MyViewHolder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageType;
         TextView title,taskNumbers;
+        CardView cardView;
         private  MyViewHolder(View itemview) {
             super(itemview);
             imageType = itemview.findViewById(R.id.taskTypeIcon);
             title = itemview.findViewById(R.id.taskTypeTitle);
             taskNumbers = itemview.findViewById(R.id.taskTypeCount);
+            cardView = itemview.findViewById(R.id.cardViewMain);
         }
     }
 }

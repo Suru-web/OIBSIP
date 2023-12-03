@@ -34,4 +34,9 @@
     <string name="all_tasks">All Tasks</string>
     <string name="category_cannot_be_empty">Category cannot be empty</string>
     <string name="task_cannot_be_empty">Task cannot be empty</string>
+    <string name="back">Back</string>
+    <string name="menu_button">Menu button</string>
+    <string name="count">Count</string>
+    <string name="add_task">Add Task</string>
+    <string name="date">Date</string>
 </resources>

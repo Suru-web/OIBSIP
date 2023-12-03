@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.circularreveal.cardview.CircularRevealCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewMain"
+    style="@style/LIST_COLORING"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/dp20"
+    android:layout_marginTop="@dimen/dp20"
+    android:layout_marginEnd="@dimen/dp20">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/dp20"
+        android:weightSum="4">
+
+        <TextView
+            android:id="@+id/taskTitle"
+            style="@style/TEXT_COLOR"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/title"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/taskDate"
+            style="@style/TEXT_COLOR"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/date"
+            android:textSize="@dimen/dp18"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/taskMonth"
+            style="@style/TEXT_COLOR"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/date"
+            android:textSize="@dimen/dp18"
+            tools:ignore="SpUsage" />
+
+        <TextView
+            android:id="@+id/taskYear"
+            style="@style/TEXT_COLOR"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/date"
+            android:textSize="@dimen/dp18"
+            tools:ignore="SpUsage" />
+
+    </LinearLayout>
+
+
+</com.google.android.material.circularreveal.cardview.CircularRevealCardView>

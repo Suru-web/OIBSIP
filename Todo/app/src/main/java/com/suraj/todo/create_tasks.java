@@ -39,6 +39,7 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
     String task, note, category;
     FirebaseFirestore fb = FirebaseFirestore.getInstance();
     String authID = FirebaseAuth.getInstance().getUid();
+    String receivedCategory = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,14 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
         checkUiMode();
         setDateAndTime();
         checkTextChange();
+
+        Intent intent = getIntent();
+        receivedCategory = intent.getStringExtra("category");
+        if (receivedCategory!=null){
+            category = receivedCategory;
+            binding.category.setText(category);
+        }
+
         binding.enterTask.requestFocus();
         binding.cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
