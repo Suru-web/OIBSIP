@@ -39,4 +39,6 @@
     <string name="count">Count</string>
     <string name="add_task">Add Task</string>
     <string name="date">Date</string>
+    <string name="please_pick_a_date">Please pick a date</string>
+    <string name="completed">Completed</string>
 </resources>

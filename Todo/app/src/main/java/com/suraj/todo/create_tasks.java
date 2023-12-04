@@ -109,6 +109,10 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 task = binding.textInputLayoutEnterTask.getEditText().getText().toString();
                 note = binding.extraNote.getText().toString();
+                if (date == 0 || month == 0 || yearDB == 0){
+                    binding.datePickerTVError.setVisibility(View.VISIBLE);
+                    return;
+                }
                 if (category == null) {
                     category = "All";
                 }
@@ -123,6 +127,7 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
                 data.put("year", yearDB);
                 data.put("notes", note);
                 data.put("category", category);
+                data.put("completed",false);
                 fb.collection("users").document(authID).collection(category).add(data   )
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override

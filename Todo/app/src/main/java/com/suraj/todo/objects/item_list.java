@@ -5,16 +5,26 @@ public class item_list {
     int date;
     int month;
     int year;
+    boolean completed;
 
     public item_list() {
 
     }
 
-    public item_list(String task, int date, int month, int year) {
+    public item_list(String task, int date, int month, int year, boolean completed) {
         this.task = task;
         this.date = date;
         this.month = month;
         this.year = year;
+        this.completed = completed;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public String getTask() {

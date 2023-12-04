@@ -32,7 +32,7 @@
                 android:layout_alignParentTop="true"
                 android:text="@string/back"
                 android:textSize="@dimen/dp16"
-                tools:ignore="RelativeOverlap,SpUsage" />
+                tools:ignore="RelativeOverlap,SpUsage,TextSizeCheck" />
 
             <ImageButton
                 android:id="@+id/menuButton"
@@ -42,8 +42,10 @@
                 android:layout_alignParentEnd="true"
                 android:background="@null"
                 android:contentDescription="@string/menu_button"
+                android:padding="@dimen/dp4"
                 android:scaleType="centerCrop"
-                android:src="@drawable/menu" />
+                android:src="@drawable/menu"
+                tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
         </RelativeLayout>
 
@@ -68,7 +70,7 @@
             android:paddingEnd="0dp"
             android:text="@string/count"
             android:textSize="@dimen/dp22"
-            tools:ignore="SpUsage" />
+            tools:ignore="SpUsage,TextSizeCheck" />
 
     </LinearLayout>
 

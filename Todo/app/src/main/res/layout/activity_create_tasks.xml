@@ -107,6 +107,18 @@
                 android:text="@string/may_29_14_00"
                 android:textSize="@dimen/dp14"
                 tools:ignore="SpUsage" />
+            <TextView
+                android:id="@+id/datePickerTVError"
+                style="@style/TEXT_COLOR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/dp10"
+                android:textColor="@color/red"
+                android:text="@string/please_pick_a_date"
+                android:textSize="@dimen/dp14"
+                tools:ignore="SpUsage" />
         </LinearLayout>
 
         <LinearLayout
