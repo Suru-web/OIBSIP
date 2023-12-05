@@ -120,6 +120,8 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
                     binding.textInputLayoutEnterTask.setHelperText(getString(R.string.task_cannot_be_empty));
                     return;
                 }
+                String id = fb.collection("users").document(authID).collection(category).document().getId();
+                System.out.println("Printing the id :"+id);
                 Map<String, Object> data = new HashMap<>();
                 data.put("task", task);
                 data.put("date", date);
@@ -128,7 +130,7 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
                 data.put("notes", note);
                 data.put("category", category);
                 data.put("completed",false);
-                fb.collection("users").document(authID).collection(category).add(data   )
+                fb.collection("users").document(authID).collection(category).add(data)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {

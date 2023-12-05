@@ -6,17 +6,37 @@ public class item_list {
     int month;
     int year;
     boolean completed;
+    String docID;
+    String categ;
 
     public item_list() {
 
     }
 
-    public item_list(String task, int date, int month, int year, boolean completed) {
+    public item_list(String task, int date, int month, int year, boolean completed, String docID, String categ) {
         this.task = task;
         this.date = date;
         this.month = month;
         this.year = year;
         this.completed = completed;
+        this.docID = docID;
+        this.categ = categ;
+    }
+
+    public String getCateg() {
+        return categ;
+    }
+
+    public void setCateg(String categ) {
+        this.categ = categ;
+    }
+
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
     }
 
     public boolean isCompleted() {

@@ -79,6 +79,9 @@ public class category_list_view extends AppCompatActivity {
                             list.clear();
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 item_list itemList = document.toObject(item_list.class);
+                                System.out.println(itemList.isCompleted());
+                                itemList.setDocID(document.getId());
+                                itemList.setCateg(category);
                                 list.add(itemList);
                             }
                             adapter.notifyDataSetChanged();

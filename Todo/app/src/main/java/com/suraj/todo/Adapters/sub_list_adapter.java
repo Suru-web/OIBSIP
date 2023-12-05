@@ -18,6 +18,8 @@ import com.suraj.todo.R;
 import com.suraj.todo.objects.item_list;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class sub_list_adapter extends RecyclerView.Adapter<sub_list_adapter.viewHolder> {
     Context context;
@@ -41,11 +43,19 @@ public class sub_list_adapter extends RecyclerView.Adapter<sub_list_adapter.view
         holder.date.setText(date);
         if (itemList.isCompleted()){
             holder.cardView.setAlpha(0.7F);
+            holder.task.setTextAppearance(R.style.CHECKBOX_TEXT);
+            holder.date.setTextAppearance(R.style.COMPLETED_TASK);
+            holder.status.setText(R.string.completed);
+            holder.status.setTextAppearance(R.style.COMPLETED_TASK);
+            holder.status.setVisibility(View.VISIBLE);
+            holder.task.setPaintFlags(holder.task.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.checkBox.setChecked(true);
         }
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.checkBox.isChecked()){
+                    FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getUid()).collection(itemList.getCateg()).document(itemList.getDocID()).update("completed",true);
                     itemList.setCompleted(true);
                     holder.cardView.setAlpha(0.7F);
                     holder.task.setTextAppearance(R.style.CHECKBOX_TEXT);
@@ -56,6 +66,7 @@ public class sub_list_adapter extends RecyclerView.Adapter<sub_list_adapter.view
                     holder.task.setPaintFlags(holder.task.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
                 else {
+                    FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getUid()).collection(itemList.getCateg()).document(itemList.getDocID()).update("completed",false);
                     itemList.setCompleted(false);
                     holder.cardView.setAlpha(1F);
                     holder.task.setTextAppearance(R.style.TEXT_COLOR);
