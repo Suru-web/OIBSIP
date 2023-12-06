@@ -94,9 +94,25 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/dp30"
+            android:layout_marginStart="@dimen/dp30"
+            android:layout_marginTop="@dimen/dp30"
+            android:layout_marginEnd="@dimen/dp30"
+            android:layout_marginBottom="@dimen/dp30"
             android:contentDescription="@string/add_task"
             android:src="@android:drawable/ic_input_add"
+            app:shapeAppearance="@style/FAB_BACKGROUND" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/deleteTask"
+            style="@style/FAB_BACKGROUND"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp30"
+            android:contentDescription="@string/add_task"
+            android:text="@string/delete_task"
+            android:visibility="gone"
+            app:icon="@android:drawable/ic_menu_delete"
             app:shapeAppearance="@style/FAB_BACKGROUND" />
 
 

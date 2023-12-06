@@ -43,7 +43,7 @@ public class category_list_view extends AppCompatActivity {
         setContentView(binding.getRoot());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        sub_list_adapter adapter = new sub_list_adapter(binding.getRoot().getContext(),list);
+        sub_list_adapter adapter = new sub_list_adapter(binding.getRoot().getContext(),list,binding.deleteTask);
         binding.listViewRecycler.setLayoutManager(new LinearLayoutManager(this));
         binding.listViewRecycler.setAdapter(adapter);
         Intent intent = getIntent();
@@ -66,9 +66,11 @@ public class category_list_view extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent(category_list_view.this,create_tasks.class);
                 intent1.putExtra("category",category);
+                adapter.notifyDataSetChanged();
                 startActivity(intent1);
             }
         });
+
 
         firestore.collection("users").document(authID).collection(category)
                 .get()
