@@ -2,26 +2,18 @@ package com.suraj.todo;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
-import com.suraj.todo.Adapters.main_adapter;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.suraj.todo.Adapters.sub_list_adapter;
 import com.suraj.todo.objects.item_list;
 
@@ -36,7 +28,7 @@ public class category_list_view extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,42 +48,32 @@ public class category_list_view extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         authID = auth.getUid();
-        binding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        binding.addTaskListViewActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(category_list_view.this,create_tasks.class);
-                intent1.putExtra("category",category);
-                adapter.notifyDataSetChanged();
-                startActivity(intent1);
-            }
+        binding.backButton.setOnClickListener(v -> finish());
+        binding.addTaskListViewActivity.setOnClickListener(v -> {
+            Intent intent1 = new Intent(category_list_view.this,create_tasks.class);
+            intent1.putExtra("category",category);
+            adapter.notifyDataSetChanged();
+            startActivity(intent1);
         });
 
 
+        assert category != null;
         firestore.collection("users").document(authID).collection(category)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            list.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                item_list itemList = document.toObject(item_list.class);
-                                System.out.println(itemList.isCompleted());
-                                itemList.setDocID(document.getId());
-                                itemList.setCateg(category);
-                                list.add(itemList);
-                            }
-                            adapter.notifyDataSetChanged();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        list.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()){
+                            item_list itemList = document.toObject(item_list.class);
+                            System.out.println(itemList.isCompleted());
+                            itemList.setDocID(document.getId());
+                            itemList.setCateg(category);
+                            list.add(itemList);
                         }
-                        else {
-                            Log.d(TAG,"Task error ",task.getException());
-                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                    else {
+                        Log.d(TAG,"Task error ",task.getException());
                     }
                 });
 

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricManager;
@@ -68,23 +67,20 @@ public class main_adapter extends RecyclerView.Adapter<main_adapter.MyViewHolder
                 break;
         }
         holder.taskNumbers.setText(String.valueOf(getTaskCountForCategory(mainList.getCategory())));
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, category_list_view.class);
-                if (mainList.getCategory().equals("Private")){
-                    fingerprintAuthentication(intent,holder.getAdapterPosition());
-                }
-                else {
-                    intent.putExtra("category",mainList.getCategory());
-                    intent.putExtra("taskCount",String.valueOf(getTaskCountForCategory(mainList.getCategory())));
-                    context.startActivity(intent);
-                }
+        holder.cardView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, category_list_view.class);
+            if (mainList.getCategory().equals("Private")){
+                fingerprintAuthentication(holder.getAdapterPosition());
+            }
+            else {
+                intent.putExtra("category",mainList.getCategory());
+                intent.putExtra("taskCount",String.valueOf(getTaskCountForCategory(mainList.getCategory())));
+                context.startActivity(intent);
             }
         });
     }
 
-    private void fingerprintAuthentication(Intent intent, int position) {
+    private void fingerprintAuthentication(int position) {
         fingerprint fingerprint = new fingerprint(context);
         fingerprint.fingerprint(context,"unlock",position);
         fingerprint.setfingerprintCallback(main_adapter.this);

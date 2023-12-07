@@ -1,6 +1,5 @@
 package com.suraj.todo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -15,15 +14,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.suraj.todo.databinding.ActivityCreateTasksBinding;
 
 import java.text.SimpleDateFormat;
@@ -58,95 +52,67 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
         }
 
         binding.enterTask.requestFocus();
-        binding.cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(create_tasks.this, MainActivity.class));
-                finish();
-            }
+        binding.cancelButton.setOnClickListener(v -> {
+            startActivity(new Intent(create_tasks.this, MainActivity.class));
+            finish();
         });
-        binding.datePickerTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int currentYear = c.get(Calendar.YEAR);
-                int currentMonth = c.get(Calendar.MONTH);
-                int currentDay = c.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        create_tasks.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @SuppressLint("SetTextI18n")
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                binding.datePickerTV.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                                date = dayOfMonth;
-                                month = monthOfYear;
-                                yearDB = year;
-                            }
-                        },
-                        currentYear, currentMonth, currentDay);
-                datePickerDialog.show();
-            }
+        binding.datePickerTV.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            int currentYear = c.get(Calendar.YEAR);
+            int currentMonth = c.get(Calendar.MONTH);
+            int currentDay = c.get(Calendar.DAY_OF_MONTH);
+            @SuppressLint("SetTextI18n") DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    create_tasks.this,
+                    (view, year, monthOfYear, dayOfMonth) -> {
+                        binding.datePickerTV.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        date = dayOfMonth;
+                        month = monthOfYear;
+                        yearDB = year;
+                    },
+                    currentYear, currentMonth, currentDay);
+            datePickerDialog.show();
         });
-        binding.addNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.addNoteCardView.setVisibility(View.VISIBLE);
-                binding.extraNote.requestFocus();
-            }
+        binding.addNote.setOnClickListener(v -> {
+            binding.addNoteCardView.setVisibility(View.VISIBLE);
+            binding.extraNote.requestFocus();
         });
-        binding.category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) create_tasks.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                binding.textInputLayoutEnterTask.clearFocus();
-                binding.addCategoryCardView.setVisibility(View.VISIBLE);
-            }
+        binding.category.setOnClickListener(v -> {
+            InputMethodManager imm = (InputMethodManager) create_tasks.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            binding.textInputLayoutEnterTask.clearFocus();
+            binding.addCategoryCardView.setVisibility(View.VISIBLE);
         });
-        binding.createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                task = binding.textInputLayoutEnterTask.getEditText().getText().toString();
-                note = binding.extraNote.getText().toString();
-                if (date == 0 || month == 0 || yearDB == 0){
-                    binding.datePickerTVError.setVisibility(View.VISIBLE);
-                    return;
-                }
-                if (category == null) {
-                    category = "All";
-                }
-                if (task.isEmpty()) {
-                    binding.textInputLayoutEnterTask.setHelperText(getString(R.string.task_cannot_be_empty));
-                    return;
-                }
-                String id = fb.collection("users").document(authID).collection(category).document().getId();
-                System.out.println("Printing the id :"+id);
-                Map<String, Object> data = new HashMap<>();
-                data.put("task", task);
-                data.put("date", date);
-                data.put("month", month);
-                data.put("year", yearDB);
-                data.put("notes", note);
-                data.put("category", category);
-                data.put("completed",false);
-                fb.collection("users").document(authID).collection(category).add(data)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Intent intent = new Intent(create_tasks.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(create_tasks.this, "Task cannot be saved", Toast.LENGTH_LONG).show();
-                            }
-                        });
+        binding.createButton.setOnClickListener(v -> {
+            task = Objects.requireNonNull(binding.textInputLayoutEnterTask.getEditText()).getText().toString();
+            note = binding.extraNote.getText().toString();
+            if (date == 0 || month == 0 || yearDB == 0){
+                binding.datePickerTVError.setVisibility(View.VISIBLE);
+                return;
             }
+            if (category == null) {
+                category = "All";
+            }
+            if (task.isEmpty()) {
+                binding.textInputLayoutEnterTask.setHelperText(getString(R.string.task_cannot_be_empty));
+                return;
+            }
+            String id = fb.collection("users").document(authID).collection(category).document().getId();
+            System.out.println("Printing the id :"+id);
+            Map<String, Object> data = new HashMap<>();
+            data.put("task", task);
+            data.put("date", date);
+            data.put("month", month);
+            data.put("year", yearDB);
+            data.put("notes", note);
+            data.put("category", category);
+            data.put("completed",false);
+            fb.collection("users").document(authID).collection(category).add(data)
+                    .addOnSuccessListener(documentReference -> {
+                        Intent intent1 = new Intent(create_tasks.this, MainActivity.class);
+                        startActivity(intent1);
+                        finish();
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(create_tasks.this, "Task cannot be saved", Toast.LENGTH_LONG).show());
         });
         binding.allTask.setOnClickListener(this);
         binding.workTask.setOnClickListener(this);
