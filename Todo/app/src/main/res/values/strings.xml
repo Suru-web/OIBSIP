@@ -42,4 +42,5 @@
     <string name="please_pick_a_date">Please pick a date</string>
     <string name="completed">Completed</string>
     <string name="delete_task">Delete Task</string>
+    <string name="privateTask">Private</string>
 </resources>

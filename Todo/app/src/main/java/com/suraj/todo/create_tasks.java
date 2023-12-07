@@ -61,6 +61,7 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
         binding.cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(create_tasks.this, MainActivity.class));
                 finish();
             }
         });
@@ -154,6 +155,7 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
         binding.studyTask.setOnClickListener(this);
         binding.homeTask.setOnClickListener(this);
         binding.musicTask.setOnClickListener(this);
+        binding.privateTask.setOnClickListener(this);
 
     }
 
@@ -225,6 +227,8 @@ public class create_tasks extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         if (id == R.id.allTask) {
             category = "All";
+        } else if (id == R.id.privateTask) {
+            category = "Private";
         } else if (id == R.id.workTask) {
             category = "Work";
         } else if (id == R.id.shoppingTask) {

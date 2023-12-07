@@ -4,18 +4,24 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.suraj.todo.Adapters.main_adapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.suraj.todo.objects.main_list;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -25,6 +31,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.suraj.todo.databinding.ActivityMainBinding;
@@ -37,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
     FirebaseFirestore firestore;
-    ArrayList<main_list> combinedList = new ArrayList<>();
+    final ArrayList<main_list> combinedList = new ArrayList<>();
     ArrayList<main_list> allList = new ArrayList<>();
+    ArrayList<main_list> privateList = new ArrayList<>();
     ArrayList<main_list> workList = new ArrayList<>();
     ArrayList<main_list> shoppingList = new ArrayList<>();
     ArrayList<main_list> tripList = new ArrayList<>();
@@ -78,37 +86,79 @@ public class MainActivity extends AppCompatActivity {
     private void getValuePutToAdapter(main_adapter adapter) {
         combinedList.clear();
         firestore.collection("users").document(authID).collection("All")
-                                .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        main_list mainList = document.toObject(main_list.class);
-                                                        mainList.setTaskCount(mainList.getTaskCount()+1);
-                                                        if (allList.isEmpty()) {
-                                                            allList.add(mainList);
-                                                        } else {
-                                                            boolean categoryExists = false;
-                                                            for (main_list listItem : allList) {
-                                                                if (listItem.getCategory().equals(mainList.getCategory())) {
-                                                                    listItem.setTaskCount(listItem.getTaskCount() + 1);
-                                                                    categoryExists = true;
-                                                                    break;
-                                                                }
-                                                            }
-                                                            if (!categoryExists) {
-                                                                allList.add(mainList);
-                                                            }
-                                                        }
-                                                    }
-                                                    adapter.notifyDataSetChanged();
-                                                    combinedList.addAll(allList);
-                                                } else {
-                                                    Log.d(TAG, "Error getting documents: ", task.getException());
-                                                }
-                                            }
-                                        });
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            allList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                main_list mainList = document.toObject(main_list.class);
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (allList.isEmpty()) {
+                                    allList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : allList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        allList.add(mainList);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(allList);
+                            }
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        firestore.collection("users").document(authID).collection("Private")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            privateList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                main_list mainList = document.toObject(main_list.class);
+                                mainList.setTaskCount(mainList.getTaskCount() + 1);
+                                if (privateList.isEmpty()) {
+                                    privateList.add(mainList);
+                                } else {
+                                    boolean categoryExists = false;
+                                    for (main_list listItem : privateList) {
+                                        if (listItem.getCategory().equals(mainList.getCategory())) {
+                                            listItem.setTaskCount(listItem.getTaskCount() + 1);
+                                            categoryExists = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!categoryExists) {
+                                        privateList.add(mainList);
+                                    }
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(privateList);
+                            }
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
         firestore.collection("users").document(authID).collection("Work")
                 .get()
@@ -116,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            workList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 main_list mainList = document.toObject(main_list.class);
                                 mainList.setTaskCount(mainList.getTaskCount() + 1);
@@ -136,7 +187,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             adapter.notifyDataSetChanged();
-                            combinedList.addAll(workList);
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(workList);
+                            }
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -148,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            tripList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 main_list mainList = document.toObject(main_list.class);
                                 mainList.setTaskCount(mainList.getTaskCount() + 1);
@@ -168,7 +224,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             adapter.notifyDataSetChanged();
-                            combinedList.addAll(tripList);
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(tripList);
+                            }
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -180,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            studyList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 main_list mainList = document.toObject(main_list.class);
                                 mainList.setTaskCount(mainList.getTaskCount() + 1);
@@ -200,7 +261,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             adapter.notifyDataSetChanged();
-                            combinedList.addAll(studyList);
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(studyList);
+                            }
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -212,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            homeList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 main_list mainList = document.toObject(main_list.class);
                                 mainList.setTaskCount(mainList.getTaskCount() + 1);
@@ -232,7 +298,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             adapter.notifyDataSetChanged();
-                            combinedList.addAll(homeList);
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(homeList);
+                            }
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -244,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            musicList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 main_list mainList = document.toObject(main_list.class);
                                 mainList.setTaskCount(mainList.getTaskCount() + 1);
@@ -264,7 +335,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             adapter.notifyDataSetChanged();
-                            combinedList.addAll(musicList);
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(musicList);
+                            }
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -276,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            shoppingList.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 main_list mainList = document.toObject(main_list.class);
                                 mainList.setTaskCount(mainList.getTaskCount() + 1);
@@ -296,7 +372,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             adapter.notifyDataSetChanged();
-                            combinedList.addAll(shoppingList);
+                            // Instead of directly adding items to combinedList, use synchronized block
+                            synchronized (combinedList) {
+                                combinedList.addAll(shoppingList);
+                            }
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -305,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void setFabColor() {
-        Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.male1)).getBitmap();
+        @SuppressLint("UseCompatLoadingForDrawables") Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.male1)).getBitmap();
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             @Override
             public void onGenerated(Palette palette) {
@@ -322,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     protected void setNameUser() {
         String name = Objects.requireNonNull(user).getDisplayName();
         if (name != null && name.isEmpty()) {
